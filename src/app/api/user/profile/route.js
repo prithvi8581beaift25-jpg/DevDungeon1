@@ -63,3 +63,57 @@ export async function POST(request) {
     );
   }
 }
+
+export async function GET(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+
+    const uid = searchParams.get("uid");
+
+    if (!uid) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "UID is required",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const userRef = adminDB.collection("users").doc(uid);
+
+const userDoc = await userRef.get();
+
+if (!userDoc.exists) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "User not found",
+        },
+        {
+          status: 404,
+        }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      user: userDoc.data(),
+    });
+
+  } catch (error) {
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: error.message,
+      },
+      {
+        status: 500,
+      }
+    );
+
+  }
+}
