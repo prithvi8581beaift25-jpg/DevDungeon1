@@ -1,0 +1,65 @@
+import { NextResponse } from "next/server";
+import { adminDB } from "@/lib/firebaseAdmin";
+
+export async function POST(request) {
+  try {
+    const body = await request.json();
+
+    const { uid, name, email, photoURL } = body;
+
+    if (!uid || !email) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "UID and Email are required",
+        },
+        { status: 400 }
+      );
+    }
+
+    const userRef = adminDB.collection("users").doc(uid);
+
+    const existingUser = await userRef.get();
+
+    if (existingUser.exists) {
+      return NextResponse.json({
+        success: true,
+        message: "User already exists",
+        user: existingUser.data(),
+      });
+    }
+
+    const newUser = {
+      uid,
+      name: name || "",
+      email,
+      photoURL: photoURL || "",
+      level: 1,
+      xp: 0,
+      coins: 100,
+      wins: 0,
+      losses: 0,
+      badges: [],
+      createdAt: new Date().toISOString(),
+    };
+
+    await userRef.set(newUser);
+
+    return NextResponse.json({
+      success: true,
+      message: "User profile created successfully",
+      user: newUser,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: error.message,
+      },
+      { status: 500 }
+    );
+  }
+}
