@@ -1,26 +1,233 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --indigo: #1a1a2e;
+  --ember: #1f1a17;
+  --plum: #241b2f;
+  --maroon: #1f1013;
+  --obsidian: #16171f;
+  --bg: var(--ember);
+  --stone: #4a4e69;
+  --gold: #ffd23f;
+  --red: #e63946;
+  --cyan: #4cc9f0;
+  --cream: #f2e9d8;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-indigo: var(--indigo);
+  --color-stone: var(--stone);
+  --color-gold: var(--gold);
+  --color-red: var(--red);
+  --color-cyan: var(--cyan);
+  --color-cream: var(--cream);
+  --font-pixel: var(--font-pixel);
+  --font-body: var(--font-body);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--obsidian);
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(255, 210, 63, 0.12), transparent 55%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0 3px, transparent 3px 58px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.4) 0 3px, transparent 3px 86px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 4px),
+    linear-gradient(165deg, var(--obsidian) 0%, var(--indigo) 45%, var(--plum) 100%);
+  background-attachment: fixed, fixed, fixed, fixed, fixed;
+  color: var(--cream);
+  font-family: var(--font-body), "VT323", monospace;
+  min-height: 100%;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-pixel), "Press Start 2P", monospace;
+  color: var(--gold);
+  text-shadow: 3px 3px 0 #000;
+  letter-spacing: 1px;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes torchGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.1); }
+}
+
+.torch-glow {
+  animation: torchGlow 3.5s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  45% { opacity: 1; }
+  47% { opacity: 0.75; }
+  49% { opacity: 1; }
+  72% { opacity: 1; }
+  74% { opacity: 0.85; }
+  76% { opacity: 1; }
+}
+
+.flicker {
+  animation: flicker 4s infinite;
+}
+
+.bob {
+  animation: bob 2.4s ease-in-out infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-4px, 2px); }
+  40% { transform: translate(4px, -2px); }
+  60% { transform: translate(-3px, 0); }
+  80% { transform: translate(3px, 1px); }
+}
+
+.shake {
+  animation: shake 0.35s;
+}
+
+@keyframes flash {
+  0% { filter: brightness(1); }
+  30% { filter: brightness(2.4) saturate(0.3); }
+  100% { filter: brightness(1); }
+}
+
+.flash {
+  animation: flash 0.35s;
+}
+
+@keyframes popOut {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 1; }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+.pop-out {
+  animation: popOut 0.6s ease-out forwards;
+}
+
+@keyframes dmgFloat {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-40px); opacity: 0; }
+}
+
+.dmg-float {
+  animation: dmgFloat 0.9s ease-out forwards;
+}
+
+/* ---------- window chrome — signature element ---------- */
+.window {
+  position: relative;
+  background: var(--stone);
+  border: 4px solid #000;
+  box-shadow: 6px 6px 0 #000, inset 0 0 0 2px var(--cream);
+  padding: 20px;
+}
+.window::before,
+.window::after,
+.window .c2::before,
+.window .c2::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--gold);
+  border: 2px solid #000;
+}
+.window::before { top: -6px; left: -6px; }
+.window::after { top: -6px; right: -6px; }
+.window .c2::before { bottom: -6px; left: -6px; }
+.window .c2::after { bottom: -6px; right: -6px; }
+.window h3 {
+  font-size: 12px;
+  color: var(--gold);
+  margin: 0 0 12px;
+}
+.window p {
+  font-family: var(--font-body), "VT323", monospace;
+  font-size: 20px;
+  margin: 0;
+  line-height: 1.5;
+  color: var(--cream);
+}
+
+/* ---------- pixel buttons ---------- */
+.pbtn {
+  display: inline-block;
+  font-family: var(--font-pixel), "Press Start 2P", monospace;
+  font-size: 11px;
+  color: var(--indigo);
+  background: var(--gold);
+  border: none;
+  padding: 16px 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  box-shadow:
+    inset -4px -4px 0 rgba(0, 0, 0, 0.35),
+    inset 4px 4px 0 rgba(255, 255, 255, 0.45),
+    4px 4px 0 #000;
+  transition: transform 0.05s;
+}
+.pbtn.cyan { background: var(--cyan); color: var(--indigo); }
+.pbtn.danger { background: var(--red); color: var(--cream); }
+.pbtn:hover { filter: brightness(1.08); }
+.pbtn:active {
+  box-shadow:
+    inset 4px 4px 0 rgba(0, 0, 0, 0.35),
+    inset -4px -4px 0 rgba(255, 255, 255, 0.25),
+    2px 2px 0 #000;
+  transform: translate(2px, 2px);
+}
+
+/* ---------- HP / XP / mana bars ---------- */
+.bar-label {
+  font-family: var(--font-body), "VT323", monospace;
+  font-size: 16px;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--cream);
+}
+.bar-outer {
+  border: 3px solid #000;
+  background: #000;
+  padding: 3px;
+  display: flex;
+  gap: 2px;
+}
+.bar-outer .seg { flex: 1; height: 18px; }
+.hp .seg { background: var(--red); }
+.hp .seg.empty { background: #3a2222; }
+.xp .seg { background: var(--gold); }
+.xp .seg.empty { background: #3a3320; }
+.mana .seg { background: var(--cyan); }
+.mana .seg.empty { background: #1e3540; }
+
+/* ---------- badges ---------- */
+.badge {
+  width: 64px;
+  height: 64px;
+  background: var(--cream);
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0 #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-pixel), "Press Start 2P", monospace;
+  font-size: 18px;
+  color: var(--indigo);
+}
+
+/* ---------- stat tile ---------- */
+.stat-tile {
+  background: var(--stone);
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0 #000;
+  padding: 18px;
+  text-align: center;
 }

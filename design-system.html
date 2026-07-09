@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CodeQuest — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#1a1a2e;
+    --ember:#1f1a17;
+    --plum:#241b2f;
+    --maroon:#1f1013;
+    --obsidian:#16171f;
+    --bg:var(--ember);
+    --stone:#4a4e69;
+    --gold:#ffd23f;
+    --red:#e63946;
+    --cyan:#4cc9f0;
+    --cream:#f2e9d8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    font-family:'VT323', monospace;
+    color:var(--cream);
+    padding:32px;
+    transition:background 0.2s steps(4);
+  }
+  @keyframes bob{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-6px); }
+  }
+  @keyframes shake{
+    0%,100%{ transform:translate(0,0); }
+    20%{ transform:translate(-4px,2px); }
+    40%{ transform:translate(4px,-2px); }
+    60%{ transform:translate(-3px,0); }
+    80%{ transform:translate(3px,1px); }
+  }
+  @keyframes flash{
+    0%{ filter:brightness(1); }
+    30%{ filter:brightness(2.4) saturate(0.3); }
+    100%{ filter:brightness(1); }
+  }
+  @keyframes flicker{
+    0%,100%{ opacity:1; }
+    45%{ opacity:1; }
+    47%{ opacity:0.75; }
+    49%{ opacity:1; }
+    72%{ opacity:1; }
+    74%{ opacity:0.85; }
+    76%{ opacity:1; }
+  }
+  @keyframes popOut{
+    0%{ transform:scale(1); opacity:1; }
+    50%{ transform:scale(1.4); opacity:1; }
+    100%{ transform:scale(0); opacity:0; }
+  }
+  @keyframes dmgFloat{
+    0%{ transform:translateY(0); opacity:1; }
+    100%{ transform:translateY(-40px); opacity:0; }
+  }
+  h1,h2{
+    font-family:'Press Start 2P', monospace;
+    color:var(--gold);
+    text-shadow:3px 3px 0 #000;
+    letter-spacing:1px;
+  }
+  h1{font-size:20px; margin-bottom:8px;}
+  h2{font-size:13px; margin:40px 0 16px; color:var(--cyan);}
+  p.sub{font-size:18px; color:var(--stone); margin:0 0 32px; filter:brightness(1.8);}
+
+  .section{margin-bottom:8px;}
+
+  /* ---------- palette ---------- */
+  .palette{display:flex; gap:12px; flex-wrap:wrap;}
+  .swatch{
+    width:130px;
+    border:3px solid #000;
+    box-shadow:4px 4px 0 #000;
+  }
+  .swatch .fill{height:70px;}
+  .swatch .label{
+    background:var(--indigo);
+    font-size:15px;
+    padding:6px 8px;
+    line-height:1.3;
+  }
+  .swatch .label b{display:block; font-size:16px;}
+
+  /* ---------- type specimen ---------- */
+  .type-row{
+    display:flex; align-items:baseline; gap:20px;
+    border-bottom:2px dashed var(--stone); padding:14px 0;
+  }
+  .type-row .tag{font-size:14px; color:var(--cyan); width:110px; flex-shrink:0;}
+  .type-row .sample.display{font-family:'Press Start 2P'; font-size:16px; color:var(--gold);}
+  .type-row .sample.body{font-family:'VT323'; font-size:24px;}
+  .type-row .sample.mono{font-family:'VT323'; font-size:22px; color:var(--cyan);}
+
+  /* ---------- window chrome (signature element) ---------- */
+  .window{
+    position:relative;
+    background:var(--stone);
+    border:4px solid #000;
+    box-shadow:6px 6px 0 #000, inset 0 0 0 2px var(--cream);
+    padding:20px;
+    margin-top:8px;
+  }
+  .window::before, .window::after,
+  .window .c2::before, .window .c2::after{
+    content:"";
+    position:absolute;
+    width:10px; height:10px;
+    background:var(--gold);
+    border:2px solid #000;
+  }
+  .window::before{ top:-6px; left:-6px; }
+  .window::after{ top:-6px; right:-6px; }
+  .window .c2::before{ bottom:-26px; left:-6px; }
+  .window .c2::after{ bottom:-26px; right:-6px; }
+  .window h3{
+    font-family:'Press Start 2P'; font-size:12px; color:var(--gold);
+    margin:0 0 12px;
+  }
+  .window p{font-size:20px; margin:0; line-height:1.5;}
+
+  /* ---------- buttons ---------- */
+  .btn-row{display:flex; gap:16px; align-items:center; flex-wrap:wrap;}
+  .pbtn{
+    font-family:'Press Start 2P'; font-size:11px;
+    color:var(--indigo);
+    background:var(--gold);
+    border:none;
+    padding:14px 20px;
+    cursor:pointer;
+    box-shadow:
+      inset -4px -4px 0 rgba(0,0,0,0.35),
+      inset 4px 4px 0 rgba(255,255,255,0.45),
+      4px 4px 0 #000;
+  }
+  .pbtn.danger{ background:var(--red); color:var(--cream); }
+  .pbtn.cyan{ background:var(--cyan); color:var(--indigo); }
+  .pbtn:active{
+    box-shadow:
+      inset 4px 4px 0 rgba(0,0,0,0.35),
+      inset -4px -4px 0 rgba(255,255,255,0.25),
+      2px 2px 0 #000;
+    transform:translate(2px,2px);
+  }
+
+  /* ---------- HP / XP bars ---------- */
+  .bar-label{font-size:16px; margin-bottom:4px; display:flex; justify-content:space-between;}
+  .bar-outer{
+    border:3px solid #000;
+    background:#000;
+    padding:3px;
+    display:flex;
+    gap:2px;
+    margin-bottom:24px;
+  }
+  .bar-outer .seg{
+    flex:1;
+    height:18px;
+  }
+  .hp .seg{background:var(--red);}
+  .hp .seg.empty{background:#3a2222;}
+  .xp .seg{background:var(--gold);}
+  .xp .seg.empty{background:#3a3320;}
+  .mana .seg{background:var(--cyan);}
+  .mana .seg.empty{background:#1e3540;}
+
+  /* ---------- badge ---------- */
+  .badge-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .badge{
+    width:64px; height:64px;
+    background:var(--cream);
+    border:3px solid #000;
+    box-shadow:3px 3px 0 #000;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Press Start 2P'; font-size:18px; color:var(--indigo);
+  }
+</style>
+</head>
+<body>
+
+  <h1>CodeQuest — Design System</h1>
+  <p class="sub">Retro 16-bit RPG · v1</p>
+
+  <div class="section">
+    <h2>Color palette</h2>
+    <div class="palette">
+      <div class="swatch"><div class="fill" style="background:var(--indigo)"></div><div class="label"><b>Indigo Night</b>#1a1a2e — base bg</div></div>
+      <div class="swatch"><div class="fill" style="background:var(--stone)"></div><div class="label"><b>Dungeon Stone</b>#4a4e69 — panels</div></div>
+      <div class="swatch"><div class="fill" style="background:var(--gold)"></div><div class="label"><b>Torch Gold</b>#ffd23f — accent / XP</div></div>
+      <div class="swatch"><div class="fill" style="background:var(--red)"></div><div class="label"><b>Potion Red</b>#e63946 — HP / danger</div></div>
+      <div class="swatch"><div class="fill" style="background:var(--cyan)"></div><div class="label"><b>Mana Cyan</b>#4cc9f0 — PvP / mana</div></div>
+      <div class="swatch"><div class="fill" style="background:var(--cream)"></div><div class="label" style="color:#1a1a2e"><b>Parchment</b>#f2e9d8 — text / light</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Typography</h2>
+    <div class="type-row">
+      <div class="tag">Display</div>
+      <div class="sample display">PRESS START 2P</div>
+    </div>
+    <div class="type-row">
+      <div class="tag">Body</div>
+      <div class="sample body">VT323 — used for dialogue, descriptions, and long-form text. Stays legible at readable sizes.</div>
+    </div>
+    <div class="type-row">
+      <div class="tag">Data / stats</div>
+      <div class="sample mono">HP 42/60   XP 1,280   LV 7</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Window chrome — signature element</h2>
+    <div class="window">
+      <div class="c2"></div>
+      <h3>RECURSION WRAITH</h3>
+      <p>A ghostly figure repeating smaller versions of itself, receding inward without end. Solve the base case to banish it.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Buttons</h2>
+    <div class="btn-row">
+      <button class="pbtn">Submit</button>
+      <button class="pbtn cyan">Duel</button>
+      <button class="pbtn danger">Retry</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>HP / XP / mana bars</h2>
+    <div class="bar-label"><span>Boss HP</span><span>7/10</span></div>
+    <div class="bar-outer hp">
+      <div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div>
+      <div class="seg"></div><div class="seg"></div><div class="seg"></div>
+      <div class="seg empty"></div><div class="seg empty"></div><div class="seg empty"></div>
+    </div>
+    <div class="bar-label"><span>XP to next level</span><span>1,280/2,000</span></div>
+    <div class="bar-outer xp">
+      <div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div>
+      <div class="seg"></div><div class="seg"></div>
+      <div class="seg empty"></div><div class="seg empty"></div><div class="seg empty"></div><div class="seg empty"></div>
+    </div>
+    <div class="bar-label"><span>Hint charges</span><span>2/5</span></div>
+    <div class="bar-outer mana">
+      <div class="seg"></div><div class="seg"></div>
+      <div class="seg empty"></div><div class="seg empty"></div><div class="seg empty"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Badges</h2>
+    <div class="badge-row">
+      <div class="badge">★</div>
+      <div class="badge">7</div>
+      <div class="badge">✓</div>
+    </div>
+  </div>
+
+</body>
+</html>
