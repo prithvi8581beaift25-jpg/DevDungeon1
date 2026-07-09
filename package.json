@@ -9,12 +9,24 @@
     "lint": "eslint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.23.0",
     "next": "16.2.10",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-icons": "^5.7.0"
+=======
+    "axios": "^1.18.1",
+    "dotenv": "^17.4.2",
+    "firebase": "^12.15.0",
+    "firebase-admin": "^13.10.0",
+    "next": "16.2.10",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-firebase-hooks": "^5.1.1",
+    "vm2": "^3.11.5"
+>>>>>>> 0c7f0df4defad34b3b1bf659808f2a674f3ffaa1
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
