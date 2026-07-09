@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { adminDB } from "@/lib/firebaseAdmin";
 
-export async function GET(request) {
+export async function POST(request) {
   try {
-    const { searchParams } = new URL(request.url);
+    const body = await request.json();
 
-    const uid = searchParams.get("uid");
+    const {
+      uid,
+      xpEarned = 0,
+      coinsEarned = 0,
+      win = false,
+      loss = false,
+    } = body;
 
     if (!uid) {
       return NextResponse.json(
@@ -37,14 +43,38 @@ export async function GET(request) {
 
     const user = userDoc.data();
 
+    let xp = user.xp + xpEarned;
+    let level = user.level;
+    let coins = user.coins + coinsEarned;
+    let wins = user.wins;
+    let losses = user.losses;
+
+    if (win) wins++;
+    if (loss) losses++;
+
+    while (xp >= 100) {
+      xp -= 100;
+      level++;
+    }
+
+    await userRef.update({
+      xp,
+      level,
+      coins,
+      wins,
+      losses,
+      updatedAt: new Date().toISOString(),
+    });
+
     return NextResponse.json({
       success: true,
+      message: "Progress updated successfully",
       progress: {
-        level: user.level,
-        xp: user.xp,
-        coins: user.coins,
-        wins: user.wins,
-        losses: user.losses,
+        level,
+        xp,
+        coins,
+        wins,
+        losses,
       },
     });
 
