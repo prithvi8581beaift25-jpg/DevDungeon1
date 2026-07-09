@@ -13,7 +13,7 @@ export async function POST(request) {
           success: false,
           message: "UID and Email are required",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -40,6 +40,19 @@ export async function POST(request) {
       wins: 0,
       losses: 0,
       badges: [],
+      currentDungeon: "tutorial",
+
+      completedDungeons: [],
+
+      inventory: [],
+
+      achievements: [],
+
+      dailyStreak: 0,
+
+      rank: "Bronze",
+
+      lastLogin: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     };
 
@@ -50,7 +63,6 @@ export async function POST(request) {
       message: "User profile created successfully",
       user: newUser,
     });
-
   } catch (error) {
     console.error(error);
 
@@ -59,7 +71,7 @@ export async function POST(request) {
         success: false,
         message: error.message,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -78,15 +90,15 @@ export async function GET(request) {
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
     const userRef = adminDB.collection("users").doc(uid);
 
-const userDoc = await userRef.get();
+    const userDoc = await userRef.get();
 
-if (!userDoc.exists) {
+    if (!userDoc.exists) {
       return NextResponse.json(
         {
           success: false,
@@ -94,7 +106,7 @@ if (!userDoc.exists) {
         },
         {
           status: 404,
-        }
+        },
       );
     }
 
@@ -102,9 +114,7 @@ if (!userDoc.exists) {
       success: true,
       user: userDoc.data(),
     });
-
   } catch (error) {
-
     return NextResponse.json(
       {
         success: false,
@@ -112,8 +122,7 @@ if (!userDoc.exists) {
       },
       {
         status: 500,
-      }
+      },
     );
-
   }
 }
