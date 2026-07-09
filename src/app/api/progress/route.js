@@ -1,8 +1,22 @@
 import { NextResponse } from "next/server";
 import { adminDB } from "@/lib/firebaseAdmin";
+import { verifyAuth } from "@/lib/verifyAuth";
 
 export async function GET(request) {
   try {
+    const auth = await verifyAuth(request);
+
+    if (!auth.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: auth.message,
+        },
+        {
+          status: auth.status,
+        },
+      );
+    }
     const { searchParams } = new URL(request.url);
 
     const uid = searchParams.get("uid");
@@ -15,7 +29,7 @@ export async function GET(request) {
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -31,7 +45,7 @@ export async function GET(request) {
         },
         {
           status: 404,
-        }
+        },
       );
     }
 
@@ -47,7 +61,6 @@ export async function GET(request) {
         losses: user.losses,
       },
     });
-
   } catch (error) {
     return NextResponse.json(
       {
@@ -56,7 +69,7 @@ export async function GET(request) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
